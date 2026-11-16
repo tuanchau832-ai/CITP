@@ -53,10 +53,10 @@
     const $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg';
     const P = [
       { k: 'ph', n: 'pH', min: 0, max: 14, st: .05, d: 2, u: '', bad: v => v < 6 || v > 8.5, base: 7.2, x: 20, y: 40, c: '#22c55e', pin: 3, knob: '#3b82f6' },
-      { k: 'turb', n: 'Turbidity', min: 0, max: 200, st: 1, d: 1, u: ' NTU', bad: v => v > 50, base: 20, x: 20, y: 120, c: '#38bdf8', pin: 4, knob: '#8b5cf6' },
-      { k: 'do', n: 'Dissolved O2', min: 0, max: 12, st: .1, d: 2, u: ' mg/L', bad: v => v < 4, base: 7, x: 20, y: 200, c: '#facc15', pin: 5, knob: '#14b8a6' },
-      { k: 'tds', n: 'TDS', min: 0, max: 2000, st: 10, d: 0, u: ' ppm', bad: v => v > 800, base: 400, x: 20, y: 280, c: '#c084fc', pin: 6, knob: '#f97316' },
-      { k: 'temp', n: 'DS18B20 Temp', min: 0, max: 60, st: .1, d: 1, u: ' °C', bad: v => v > 35, base: 28.5, x: 545, y: 200, knob: '#ef4444' }
+      { k: 'turb', n: 'Turbidity', min: 0, max: 200, st: 1, d: 1, u: 'NTU', bad: v => v > 50, base: 20, x: 20, y: 120, c: '#38bdf8', pin: 4, knob: '#8b5cf6' },
+      { k: 'do', n: 'Dissolved O2', min: 0, max: 12, st: .1, d: 2, u: 'mg/L', bad: v => v < 4, base: 7, x: 20, y: 200, c: '#facc15', pin: 5, knob: '#14b8a6' },
+      { k: 'tds', n: 'TDS', min: 0, max: 2000, st: 10, d: 0, u: 'ppm', bad: v => v > 800, base: 400, x: 20, y: 280, c: '#c084fc', pin: 6, knob: '#f97316' },
+      { k: 'temp', n: 'DS18B20 Temp', min: 0, max: 60, st: .1, d: 1, u: '°C', bad: v => v > 35, base: 28.5, x: 545, y: 200, knob: '#ef4444' }
     ];
     const spill = { ph: 4.8, turb: 130, do: 2.2, tds: 1400, temp: 38 };
     const V = {}; P.forEach(p => V[p.k] = p.base);
@@ -78,12 +78,22 @@
     L.forEach((t, i) => { const [x, y] = LP(i); s += `<circle cx="${x}" cy="${y}" r="4.5" fill="#d4af37"/><circle cx="${x}" cy="${y}" r="1.6" fill="#222"/><text class="pin" x="${x + 10}" y="${y + 3}">${t}</text>` });
     R.forEach((t, i) => { const [x, y] = RP(i); s += `<circle cx="${x}" cy="${y}" r="4.5" fill="#d4af37"/><circle cx="${x}" cy="${y}" r="1.6" fill="#222"/><text class="pin" x="${x - 10}" y="${y + 3}" text-anchor="end">${t}</text>` });
 
-    // Sliders (pots) - Đã bỏ chữ "Pot: " ở đây
+    // Sliders (pots) + Ô nhập số trực tiếp (foreignObject)
     P.forEach(p => {
-      s += `<g id="g${p.k}"><text class="lb" x="${p.x}" y="${p.y - 8}">${p.n}</text><text class="lb" id="pv${p.k}" x="${p.x + 140}" y="${p.y - 8}" text-anchor="end" font-weight="700"></text>
-      <rect x="${p.x}" y="${p.y}" width="140" height="28" rx="3" fill="#d6d6d6" stroke="#8a8a8a"/><rect x="${p.x + 10}" y="${p.y + 12}" width="120" height="4" rx="2" fill="#444"/>
-      <rect class="sk" id="kn${p.k}" y="${p.y + 3}" width="14" height="22" rx="2" fill="${p.knob}" stroke="#111"/><rect class="sk" id="hit${p.k}" x="${p.x}" y="${p.y - 4}" width="140" height="36" fill="transparent"/>
-      ${p.k === 'temp' ? '' : [40, 70, 100].map((o, j) => `<rect x="${p.x + o - 3}" y="${p.y + 28}" width="6" height="9" fill="${['#111', '#d4af37', '#dc2626'][j] === '#111' ? '#888' : '#d4af37'}"/>`).join('')}</g>`;
+      s += `<g id="g${p.k}">
+        <text class="lb" x="${p.x}" y="${p.y - 7}">${p.n}</text>
+        <foreignObject x="${p.x + 74}" y="${p.y - 22}" width="72" height="20">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="vin-wrap" id="vw${p.k}">
+            <input class="vin" id="in${p.k}" type="number" min="${p.min}" max="${p.max}" step="${p.st}" aria-label="${p.n}"/>
+            ${p.u ? `<span>${p.u}</span>` : ''}
+          </div>
+        </foreignObject>
+        <rect x="${p.x}" y="${p.y}" width="140" height="28" rx="3" fill="#d6d6d6" stroke="#8a8a8a"/>
+        <rect x="${p.x + 10}" y="${p.y + 12}" width="120" height="4" rx="2" fill="#444"/>
+        <rect class="sk" id="kn${p.k}" y="${p.y + 3}" width="14" height="22" rx="2" fill="${p.knob}" stroke="#111"/>
+        <rect class="sk" id="hit${p.k}" x="${p.x}" y="${p.y - 4}" width="140" height="36" fill="transparent"/>
+        ${p.k === 'temp' ? '' : [40, 70, 100].map((o, j) => `<rect x="${p.x + o - 3}" y="${p.y + 28}" width="6" height="9" fill="${['#111', '#d4af37', '#dc2626'][j] === '#111' ? '#888' : '#d4af37'}"/>`).join('')}
+      </g>`;
       if (p.k !== 'temp') w += W([p.x + 70, p.y + 37], LP(p.pin), p.c, 90);
     });
 
@@ -107,10 +117,15 @@
     s += `<g transform="translate(545 410)"><rect width="150" height="64" rx="6" fill="#1b1d22" stroke="#555"/><text class="lb" x="75" y="22" text-anchor="middle" fill="#fff">breachCount</text><text id="cnt" x="75" y="52" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">0/3</text></g>`;
     $('wires').innerHTML = w; $('parts').innerHTML = s;
 
-    // Slider interaction
+    // Slider & Input interaction
     const svg = $('svg');
-    function knob(p) { const f = (V[p.k] - p.min) / (p.max - p.min); $('kn' + p.k).setAttribute('x', p.x + 10 + f * 106); }
+    function knob(p) {
+      const f = (V[p.k] - p.min) / (p.max - p.min);
+      $('kn' + p.k).setAttribute('x', p.x + 10 + f * 106);
+    }
+
     P.forEach(p => {
+      // 1. Kéo thanh trượt bằng chuột/cảm ứng
       const h = $('hit' + p.k);
       const mv = e => {
         const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
@@ -123,6 +138,29 @@
       };
       h.addEventListener('pointerdown', e => { h.setPointerCapture(e.pointerId); mv(e); h.onpointermove = mv; });
       h.addEventListener('pointerup', () => h.onpointermove = null);
+
+      // 2. Nhập số trực tiếp từ bàn phím -> cập nhật thanh kéo
+      const inp = $('in' + p.k);
+      inp.addEventListener('input', () => {
+        const raw = parseFloat(inp.value);
+        if (isNaN(raw)) return;
+        V[p.k] = Math.max(p.min, Math.min(p.max, raw));
+        setMode('manual');
+        knob(p);
+        $('vw' + p.k).classList.toggle('bad', p.bad(V[p.k]));
+      });
+
+      const commit = () => {
+        const raw = parseFloat(inp.value);
+        if (!isNaN(raw)) {
+          V[p.k] = Math.max(p.min, Math.min(p.max, raw));
+          setMode('manual');
+        }
+        draw();
+      };
+      inp.addEventListener('change', commit);
+      inp.addEventListener('blur', commit);
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); });
     });
 
     // Controls
@@ -141,7 +179,6 @@
       $('ser').hidden = t !== 'ser'; $('ts').hidden = t !== 'ts';
     };
 
-    const fmt = (p, v) => v.toFixed(p.d) + p.u;
     function log(id, t) {
       const d = $(id); d.textContent += t + '\n';
       const l = d.textContent.split('\n');
@@ -153,10 +190,12 @@
     function draw() {
       P.forEach(p => {
         knob(p);
-        const b = p.bad(V[p.k]);
-        const e = $('pv' + p.k);
-        e.textContent = fmt(p, V[p.k]);
-        e.style.fill = b ? 'var(--bad)' : 'var(--ok)';
+        const inp = $('in' + p.k);
+        // Không ghi đè nếu người dùng đang gõ dở trong ô đó
+        if (document.activeElement !== inp) {
+          inp.value = V[p.k].toFixed(p.d);
+        }
+        $('vw' + p.k).classList.toggle('bad', p.bad(V[p.k]));
       });
     }
 
@@ -205,6 +244,7 @@
     }
 
     function boot() {
+      if (document.activeElement) document.activeElement.blur();
       $('ser').textContent = 'ets Jul 29 2019 12:21:46\n\nrst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)\nconfigsip: 0, SPIWP:0xee\nConnecting to WiFi....\nWiFi connected successfully!\n';
       $('ts').textContent = '';
       cnt = 0; alert = 0; mA = 0; sA = 0; sim = 0; n = 0;
