@@ -40,6 +40,18 @@
         <button class="on" data-t="ser">Serial Monitor</button>
         <button data-t="ts">ThingSpeak</button>
       </div>
+      <section class="assessment" aria-label="Assessment explanation">
+        <strong>Current inputs · experimental screening</strong>
+        <p id="rule"></p>
+        <p id="reason" aria-live="polite"></p>
+        <small>The alert changes at each 3-second sample. Three consecutive breached samples confirm alert = 1.</small>
+        <details>
+          <summary>How to read the result</summary>
+          <p>Any failed limit counts as one breached sample. Samples 1–2 show a yellow warning with alert = 0. Sample 3 confirms red with alert = 1. A sample within all limits resets the count and alert.</p>
+          <p>Limits: pH 6.00–8.50, DO ≥ 4.00 mg/L, TDS ≤ 500 ppm, temperature ≤ 35 °C. Turbidity is allowed up to 75 NTU when DO ≥ 4.20 and TDS ≤ 400; otherwise 50 NTU.</p>
+          <p>This sensor combination is a project heuristic. It cannot establish the cause of turbidity or certify water safety.</p>
+        </details>
+      </section>
       <div class="mon" id="ser"></div>
       <div class="mon" id="ts" hidden></div>
       <div class="foot">
@@ -51,15 +63,31 @@
 
   <script>
     const $ = id => document.getElementById(id), NS = 'http://www.w3.org/2000/svg';
+    // Sensor-only experimental rule supplied by the project team.
+    function turbidityLimit(values) {
+      return values.do >= 4.2 && values.tds <= 400 ? 75 : 50;
+    }
+
     const P = [
       { k: 'ph', n: 'pH', min: 0, max: 14, st: .05, d: 2, u: '', bad: v => v < 6 || v > 8.5, base: 7.2, x: 20, y: 40, c: '#22c55e', pin: 3, knob: '#3b82f6' },
-      { k: 'turb', n: 'Turbidity', min: 0, max: 200, st: 1, d: 1, u: 'NTU', bad: v => v > 50, base: 20, x: 20, y: 120, c: '#38bdf8', pin: 4, knob: '#8b5cf6' },
+      { k: 'turb', n: 'Turbidity', min: 0, max: 250, st: 1, d: 1, u: 'NTU', bad: v => v > turbidityLimit(V), base: 20, x: 20, y: 120, c: '#38bdf8', pin: 4, knob: '#8b5cf6' },
       { k: 'do', n: 'Dissolved O2', min: 0, max: 12, st: .1, d: 2, u: 'mg/L', bad: v => v < 4, base: 7, x: 20, y: 200, c: '#facc15', pin: 5, knob: '#14b8a6' },
-      { k: 'tds', n: 'TDS', min: 0, max: 2000, st: 10, d: 0, u: 'ppm', bad: v => v > 800, base: 400, x: 20, y: 280, c: '#c084fc', pin: 6, knob: '#f97316' },
+      { k: 'tds', n: 'TDS', min: 0, max: 2000, st: 10, d: 0, u: 'ppm', bad: v => v > 500, base: 400, x: 20, y: 280, c: '#c084fc', pin: 6, knob: '#f97316' },
       { k: 'temp', n: 'DS18B20 Temp', min: 0, max: 60, st: .1, d: 1, u: '°C', bad: v => v > 35, base: 28.5, x: 545, y: 200, knob: '#ef4444' }
     ];
     const spill = { ph: 4.8, turb: 130, do: 2.2, tds: 1400, temp: 38 };
     const V = {}; P.forEach(p => V[p.k] = p.base);
+
+    function assessment() {
+      const limit = turbidityLimit(V);
+      const reasons = [];
+      if (V.ph < 6 || V.ph > 8.5) reasons.push('pH outside 6.00–8.50');
+      if (V.turb > limit) reasons.push(`Turbidity > ${limit} NTU`);
+      if (V.do < 4) reasons.push('DO < 4.00 mg/L');
+      if (V.tds > 500) reasons.push('TDS > 500 ppm');
+      if (V.temp > 35) reasons.push('Temperature > 35.0 °C');
+      return { limit, reasons, breached: reasons.length > 0 };
+    }
     const LP = i => [308, 190 + 18 * i], RP = i => [462, 190 + 18 * i];
     const L = ['EN', 'VP', 'VN', 'D34', 'D35', 'D32', 'D33', 'D25', 'D26', 'D27', 'D14', 'D12', 'D13', 'GND', 'VIN'];
     const R = ['D23', 'D22', 'TX0', 'RX0', 'D21', 'D19', 'D18', 'D5', 'TX2', 'RX2', 'D4', 'D2', 'D15', 'GND', '3V3'];
@@ -146,8 +174,7 @@
         if (isNaN(raw)) return;
         V[p.k] = Math.max(p.min, Math.min(p.max, raw));
         setMode('manual');
-        knob(p);
-        $('vw' + p.k).classList.toggle('bad', p.bad(V[p.k]));
+        draw();
       });
 
       const commit = () => {
@@ -197,6 +224,13 @@
         }
         $('vw' + p.k).classList.toggle('bad', p.bad(V[p.k]));
       });
+      const result = assessment();
+      $('rule').textContent = `Turbidity limit: ${result.limit} NTU · ` +
+        (result.limit === 75 ? 'DO ≥ 4.20 and TDS ≤ 400' : 'DO < 4.20 or TDS > 400');
+      $('reason').textContent = result.breached
+        ? 'Outside limits: ' + result.reasons.join('; ')
+        : 'All current inputs are within the screening limits.';
+      $('reason').className = result.breached ? 'reason-bad' : '';
     }
 
     function drive() {
@@ -216,8 +250,8 @@
 
     function measure() {
       drive();
-      const br = P.some(p => p.bad(V[p.k]));
-      cnt = br ? cnt + 1 : 0;
+      const result = assessment();
+      cnt = result.breached ? Math.min(cnt + 1, 3) : 0;
       alert = cnt >= 3 ? 1 : 0;
       draw();
       const on = (id, a) => { $(id).setAttribute('opacity', a ? 1 : .35); };
@@ -229,18 +263,18 @@
 
       const c = $('chip');
       c.className = 'chip' + (alert ? ' bad' : cnt ? ' warn' : '');
-      c.textContent = alert ? 'RED: THRESHOLD EXCEEDED (3/3)' : cnt ? `YELLOW: Warning ${cnt}/3` : 'GREEN: SAFE';
+      c.textContent = alert ? 'RED: THRESHOLD EXCEEDED (3/3)' : cnt ? `YELLOW: Warning ${cnt}/3` : 'GREEN: WITHIN LIMITS';
 
       $('blue').setAttribute('fill', '#60a5fa');
       setTimeout(() => $('blue').setAttribute('fill', '#1e3a8a'), 150);
 
-      log('ser', `pH: ${V.ph.toFixed(2)} | Turb: ${V.turb.toFixed(1)} | DO: ${V.do.toFixed(2)} | Temp: ${V.temp.toFixed(1)} | TDS: ${V.tds.toFixed(0)} ppm | Breaches: ${cnt}/3`);
+      log('ser', `pH: ${V.ph.toFixed(2)} | Turb: ${V.turb.toFixed(1)} | DO: ${V.do.toFixed(2)} | Temp: ${V.temp.toFixed(1)} | TDS: ${V.tds.toFixed(0)} ppm | Breaches: ${cnt}/3 | Turbidity limit: ${result.limit} NTU | ${result.reasons.join('; ') || 'Within limits'}`);
     }
 
     function send() {
       n++;
-      log('ser', '>>> Data pushed to ThingSpeak (Code 200) | Alert = ' + alert);
-      log('ts', `entry #${n}  (t=${sim.toFixed(0)}s)\nGET api.thingspeak.com/update\n  field1=${V.ph.toFixed(2)}  field2=${V.turb.toFixed(1)}\n  field3=${V.do.toFixed(2)}  field4=${V.temp.toFixed(1)}\n  field5=${V.tds.toFixed(0)}  field6=${alert}\n=> ${alert ? 'THRESHOLD EXCEEDED' : 'SAFE'}\n`);
+      log('ser', '>>> Simulated ThingSpeak upload (Code 200) | Alert = ' + alert);
+      log('ts', `entry #${n}  (t=${sim.toFixed(0)}s)\nGET api.thingspeak.com/update\n  field1=${V.ph.toFixed(2)}  field2=${V.turb.toFixed(1)}\n  field3=${V.do.toFixed(2)}  field4=${V.temp.toFixed(1)}\n  field5=${V.tds.toFixed(0)}  field6=${alert}\n=> ${alert ? 'CONFIRMED ALERT' : cnt ? 'PENDING WARNING (alert=0)' : 'WITHIN LIMITS'}\n`);
     }
 
     function boot() {

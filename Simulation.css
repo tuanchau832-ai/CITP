@@ -172,7 +172,7 @@ button:focus-visible {
 
 .tabs button.on {
   background: var(--mon);
-  color: var(--tx);
+  color: var(--mt);
 }
 
 .mon {
@@ -247,3 +247,18 @@ button:focus-visible {
   outline: 1.5px solid #3b82f6;
   border-color: #3b82f6;
 }
+
+.assessment {
+  padding: 12px;
+  background: var(--bar);
+  border-bottom: 1px solid var(--ln);
+  font-size: 13px;
+}
+
+.assessment p { margin: 6px 0; }
+.assessment small { color: var(--mu); }
+.assessment summary { margin-top: 8px; cursor: pointer; }
+.assessment .reason-bad { color: var(--bad); }
+.assessment details { max-height: 180px; overflow: auto; }
+.side { min-height: 0; }
+.mon { min-height: 140px; }
