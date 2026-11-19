@@ -1,0 +1,59 @@
+{
+  "registry_version": 1,
+  "statuses": {
+    "normal": {
+      "fill": "#16A34A",
+      "text": "#14532D",
+      "icon": "CheckCircle2",
+      "label": {
+        "en": "Normal",
+        "vi": "Bình thường"
+      }
+    },
+    "abnormal": {
+      "fill": "#DC2626",
+      "text": "#7F1D1D",
+      "icon": "AlertTriangle",
+      "label": {
+        "en": "Abnormal (preliminary)",
+        "vi": "Bất thường (sơ bộ)"
+      }
+    },
+    "sensor_fault": {
+      "fill": "#D97706",
+      "text": "#78350F",
+      "icon": "Wrench",
+      "label": {
+        "en": "Sensor fault",
+        "vi": "Lỗi cảm biến"
+      }
+    },
+    "offline": {
+      "fill": "#6B7280",
+      "text": "#1F2937",
+      "icon": "WifiOff",
+      "label": {
+        "en": "Offline",
+        "vi": "Mất kết nối"
+      }
+    },
+    "unavailable": {
+      "fill": "#CBD5E1",
+      "text": "#475569",
+      "icon": "MinusCircle",
+      "label": {
+        "en": "No data",
+        "vi": "Không có dữ liệu"
+      }
+    },
+    "degraded": {
+      "fill": "#CA8A04",
+      "text": "#713F12",
+      "icon": "AlertCircle",
+      "label": {
+        "en": "Degraded",
+        "vi": "Suy giảm"
+      }
+    }
+  }
+}

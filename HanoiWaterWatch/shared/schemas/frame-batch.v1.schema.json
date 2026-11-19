@@ -1,0 +1,257 @@
+{
+  "$defs": {
+    "Diag": {
+      "additionalProperties": false,
+      "properties": {
+        "buffer_depth": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Buffer Depth",
+          "type": "integer"
+        },
+        "dropped_frames": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Dropped Frames",
+          "type": "integer"
+        },
+        "rejected_batches": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Rejected Batches",
+          "type": "integer"
+        },
+        "wifi_rssi": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Wifi Rssi"
+        }
+      },
+      "title": "Diag",
+      "type": "object"
+    },
+    "Frame": {
+      "additionalProperties": false,
+      "properties": {
+        "seq": {
+          "maximum": 2147483647,
+          "minimum": 0,
+          "title": "Seq",
+          "type": "integer"
+        },
+        "measured_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Measured At"
+        },
+        "time_source": {
+          "enum": [
+            "ntp",
+            "server",
+            "uptime"
+          ],
+          "title": "Time Source",
+          "type": "string"
+        },
+        "uptime_ms": {
+          "minimum": 0,
+          "title": "Uptime Ms",
+          "type": "integer"
+        },
+        "buffered": {
+          "title": "Buffered",
+          "type": "boolean"
+        },
+        "mode": {
+          "enum": [
+            "manual",
+            "gradual_ph",
+            "spike_turb",
+            "do_drop"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "readings": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Reading"
+          },
+          "minProperties": 1,
+          "title": "Readings",
+          "type": "object"
+        }
+      },
+      "required": [
+        "seq",
+        "measured_at",
+        "time_source",
+        "uptime_ms",
+        "buffered",
+        "mode",
+        "readings"
+      ],
+      "title": "Frame",
+      "type": "object"
+    },
+    "Reading": {
+      "additionalProperties": false,
+      "properties": {
+        "v": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "V"
+        },
+        "u": {
+          "title": "U",
+          "type": "string"
+        },
+        "q": {
+          "enum": [
+            "ok",
+            "fault"
+          ],
+          "title": "Q",
+          "type": "string"
+        },
+        "raw": {
+          "anyOf": [
+            {
+              "maximum": 4095,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw"
+        },
+        "gen": {
+          "enum": [
+            "input",
+            "profile"
+          ],
+          "title": "Gen",
+          "type": "string"
+        },
+        "fr": {
+          "anyOf": [
+            {
+              "enum": [
+                "injected",
+                "disconnected",
+                "out_of_range"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fr"
+        }
+      },
+      "required": [
+        "v",
+        "u",
+        "q",
+        "gen"
+      ],
+      "title": "Reading",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "hww.frames.v1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "station_code": {
+      "pattern": "^HWW-[A-Z]{3}-\\d{3}$",
+      "title": "Station Code",
+      "type": "string"
+    },
+    "device_code": {
+      "title": "Device Code",
+      "type": "string"
+    },
+    "boot_id": {
+      "pattern": "^[0-9a-f]{8}$",
+      "title": "Boot Id",
+      "type": "string"
+    },
+    "fw_version": {
+      "maxLength": 100,
+      "title": "Fw Version",
+      "type": "string"
+    },
+    "sent_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Sent At"
+    },
+    "sent_uptime_ms": {
+      "minimum": 0,
+      "title": "Sent Uptime Ms",
+      "type": "integer"
+    },
+    "diag": {
+      "$ref": "#/$defs/Diag"
+    },
+    "frames": {
+      "items": {
+        "$ref": "#/$defs/Frame"
+      },
+      "maxItems": 50,
+      "minItems": 1,
+      "title": "Frames",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "station_code",
+    "device_code",
+    "boot_id",
+    "fw_version",
+    "sent_at",
+    "sent_uptime_ms",
+    "diag",
+    "frames"
+  ],
+  "title": "Batch",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hww.frames.v1"
+}

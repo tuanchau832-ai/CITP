@@ -1,0 +1,49 @@
+{
+  "registry_version": 1,
+  "types": {
+    "ph": {
+      "unit": "pH",
+      "unit_display": "pH",
+      "decimals": 2,
+      "valid_min": 0,
+      "valid_max": 14,
+      "label": {
+        "en": "pH",
+        "vi": "pH"
+      }
+    },
+    "do": {
+      "unit": "mg/L",
+      "unit_display": "mg/L",
+      "decimals": 2,
+      "valid_min": 0,
+      "valid_max": 20,
+      "label": {
+        "en": "Dissolved oxygen",
+        "vi": "Oxy hòa tan"
+      }
+    },
+    "turbidity": {
+      "unit": "NTU",
+      "unit_display": "NTU",
+      "decimals": 1,
+      "valid_min": 0,
+      "valid_max": 1000,
+      "label": {
+        "en": "Turbidity",
+        "vi": "Độ đục"
+      }
+    },
+    "temp": {
+      "unit": "degC",
+      "unit_display": "°C",
+      "decimals": 2,
+      "valid_min": -5,
+      "valid_max": 60,
+      "label": {
+        "en": "Water temperature",
+        "vi": "Nhiệt độ nước"
+      }
+    }
+  }
+}

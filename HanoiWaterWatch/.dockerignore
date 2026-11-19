@@ -1,0 +1,13 @@
+.git
+.env*
+!.env.example
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+.local
+.venv
+.tools
+firmware/.pio
+frontend/test-results
+frontend/playwright-report
+

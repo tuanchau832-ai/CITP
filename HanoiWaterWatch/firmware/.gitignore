@@ -1,0 +1,4 @@
+include/config.h
+.pio/
+wokwi-web/config.h
+test/*.exe

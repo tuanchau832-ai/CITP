@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hww.station-state.v1",
+  "type": "object",
+  "required": ["station_code", "version", "generated_at", "is_simulated", "station_status", "sensors", "open_alert_count"],
+  "properties": {
+    "station_code": {"type": "string", "pattern": "^HWW-[A-Z]{3}-[0-9]{3}$"},
+    "version": {"type": "integer", "minimum": 0},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "is_simulated": {"const": true},
+    "station_status": {"enum": ["normal", "abnormal", "degraded", "offline", "unavailable"]},
+    "sensors": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["channel", "uid", "value", "status", "measured_at", "last_valid"],
+        "properties": {
+          "channel": {"enum": ["ph", "do", "turbidity", "temp"]},
+          "uid": {"type": "string"},
+          "value": {"type": ["number", "null"]},
+          "status": {"enum": ["normal", "abnormal", "sensor_fault", "offline", "unavailable"]},
+          "measured_at": {"type": ["string", "null"]},
+          "last_valid": {"type": ["object", "null"]}
+        },
+        "allOf": [{
+          "if": {"properties": {"status": {"enum": ["sensor_fault", "offline", "unavailable"]}}},
+          "then": {"properties": {"value": {"type": "null"}}}
+        }]
+      }
+    },
+    "open_alert_count": {"type": "integer", "minimum": 0}
+  }
+}

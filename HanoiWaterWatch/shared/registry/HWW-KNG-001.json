@@ -1,0 +1,350 @@
+{
+  "registry_version": 1,
+  "station": {
+    "code": "HWW-KNG-001",
+    "name": {
+      "en": "Kim Ngưu River, demo station 1",
+      "vi": "Sông Kim Ngưu, trạm mô phỏng 1"
+    },
+    "river": "Kim Ngưu",
+    "location": {
+      "lat": 20.995,
+      "lng": 105.861,
+      "precision": "illustrative"
+    },
+    "data_mode": "live_wokwi",
+    "timezone": "Asia/Ho_Chi_Minh"
+  },
+  "model": {
+    "glb_path": "/models/station-v1.glb",
+    "version": 1,
+    "components": [
+      {
+        "node": "cabinet",
+        "kind": "structure",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Electronics cabinet",
+          "vi": "Tủ thiết bị"
+        },
+        "description": {
+          "en": "Electronics cabinet in the simulated station.",
+          "vi": "Tủ thiết bị trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "beacon",
+        "kind": "indicator",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Alert beacon",
+          "vi": "Đèn cảnh báo"
+        },
+        "description": {
+          "en": "Alert beacon in the simulated station.",
+          "vi": "Đèn cảnh báo trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "antenna",
+        "kind": "structure",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Antenna",
+          "vi": "Ăng ten"
+        },
+        "description": {
+          "en": "Antenna in the simulated station.",
+          "vi": "Ăng ten trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "display",
+        "kind": "indicator",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "OLED display",
+          "vi": "Màn hình OLED"
+        },
+        "description": {
+          "en": "OLED display in the simulated station.",
+          "vi": "Màn hình OLED trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "led_green",
+        "kind": "indicator",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Normal lamp",
+          "vi": "Đèn bình thường"
+        },
+        "description": {
+          "en": "Normal lamp in the simulated station.",
+          "vi": "Đèn bình thường trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "led_yellow",
+        "kind": "indicator",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Degraded lamp",
+          "vi": "Đèn suy giảm"
+        },
+        "description": {
+          "en": "Degraded lamp in the simulated station.",
+          "vi": "Đèn suy giảm trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "led_red",
+        "kind": "indicator",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Abnormal lamp",
+          "vi": "Đèn bất thường"
+        },
+        "description": {
+          "en": "Abnormal lamp in the simulated station.",
+          "vi": "Đèn bất thường trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "esp32",
+        "kind": "controller",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "ESP32 controller",
+          "vi": "Bộ điều khiển ESP32"
+        },
+        "description": {
+          "en": "ESP32 controller in the simulated station.",
+          "vi": "Bộ điều khiển ESP32 trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "solar_panel",
+        "kind": "power",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Solar panel",
+          "vi": "Tấm năng lượng"
+        },
+        "description": {
+          "en": "Solar panel in the simulated station.",
+          "vi": "Tấm năng lượng trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "battery",
+        "kind": "power",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Battery",
+          "vi": "Pin"
+        },
+        "description": {
+          "en": "Battery in the simulated station.",
+          "vi": "Pin trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "platform",
+        "kind": "structure",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Platform",
+          "vi": "Sàn trạm"
+        },
+        "description": {
+          "en": "Platform in the simulated station.",
+          "vi": "Sàn trạm trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "mast",
+        "kind": "structure",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Mast",
+          "vi": "Cột"
+        },
+        "description": {
+          "en": "Mast in the simulated station.",
+          "vi": "Cột trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "buzzer",
+        "kind": "indicator",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Buzzer",
+          "vi": "Còi"
+        },
+        "description": {
+          "en": "Buzzer in the simulated station.",
+          "vi": "Còi trong trạm mô phỏng."
+        }
+      },
+      {
+        "node": "sensor_rack",
+        "kind": "structure",
+        "hotspot": [
+          0.42,
+          1.1,
+          0.1
+        ],
+        "label": {
+          "en": "Sensor rack",
+          "vi": "Giá cảm biến"
+        },
+        "description": {
+          "en": "Sensor rack in the simulated station.",
+          "vi": "Giá cảm biến trong trạm mô phỏng."
+        }
+      }
+    ]
+  },
+  "sensors": [
+    {
+      "channel": "ph",
+      "uid": "HWW-KNG-001:ph",
+      "model_node": "sensor_ph",
+      "hotspot": [
+        -0.12,
+        0.22,
+        0.61
+      ],
+      "wokwi": {
+        "part_id": "pot_ph",
+        "pin": "34",
+        "substitute": true
+      },
+      "transfer": {
+        "kind": "linear",
+        "raw_max": 4095,
+        "out_min": 0,
+        "out_max": 14
+      }
+    },
+    {
+      "channel": "do",
+      "uid": "HWW-KNG-001:do",
+      "model_node": "sensor_do",
+      "hotspot": [
+        -0.04,
+        0.22,
+        0.61
+      ],
+      "wokwi": {
+        "part_id": "pot_do",
+        "pin": "35",
+        "substitute": true
+      },
+      "transfer": {
+        "kind": "linear",
+        "raw_max": 4095,
+        "out_min": 0,
+        "out_max": 20
+      }
+    },
+    {
+      "channel": "turbidity",
+      "uid": "HWW-KNG-001:turbidity",
+      "model_node": "sensor_turbidity",
+      "hotspot": [
+        0.04,
+        0.22,
+        0.61
+      ],
+      "wokwi": {
+        "part_id": "pot_turb",
+        "pin": "32",
+        "substitute": true
+      },
+      "transfer": {
+        "kind": "quadratic",
+        "raw_max": 4095,
+        "out_min": 0,
+        "out_max": 1000
+      }
+    },
+    {
+      "channel": "temp",
+      "uid": "HWW-KNG-001:temp",
+      "model_node": "sensor_temp",
+      "hotspot": [
+        0.12,
+        0.22,
+        0.61
+      ],
+      "wokwi": {
+        "part_id": "temp1",
+        "pin": "4",
+        "substitute": false
+      },
+      "transfer": {
+        "kind": "native"
+      }
+    }
+  ],
+  "device": {
+    "code": "wokwi-esp32-01",
+    "kind": "wokwi_esp32",
+    "frame_interval_ms": 2000
+  }
+}
