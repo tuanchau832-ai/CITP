@@ -259,3 +259,39 @@ th, td {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; }
 }
+
+.station-demo-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding: 0; margin: 0 0 0.75rem; list-style: none; }
+
+.station-link { display: flex; align-items: center; gap: 0.5rem; }
+.station-note { margin: 0.25rem 0 0; color: var(--secondary-text); }
+
+.contents-subhead { margin-top: 1.25rem; }
+
+.demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.demo-tabs { display: flex; gap: 1.25rem; }
+.demo-tabs a { padding-block: 0.3rem; text-decoration: none; }
+.demo-tabs a:hover, .demo-tabs [aria-current="page"] { text-decoration: underline; }
+.demo-tabs [aria-current="page"] { font-weight: 700; }
+
+.demo-frames { position: relative; height: 46rem; margin-bottom: 0.75rem; }
+
+.demo-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--rule);
+  background: #fff;
+  z-index: 1;
+}
+
+/* Transparent, not hidden: the inactive page keeps running so the two pages stay linked. */
+.demo-frame-parked { opacity: 0; pointer-events: none; z-index: 0; }

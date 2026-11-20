@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { reportRoutes } from '../reportRoutes';
 import { Bibliography, Citation, DecisionMatrix, Pending, ReportFigure, ReportTable } from './Evidence';
+import { StationDemo } from './StationDemo';
 
 export function ReportPage({ index }: { index: number }) {
   const { section } = reportRoutes[index];
@@ -21,7 +22,7 @@ export function ReportPage({ index }: { index: number }) {
         <h1>{section.title}</h1>
         <p className="intro-copy">{section.summary}</p>
       </header>
-      {section.topics.map(({ id, title, pending, paragraphs, figure, table, matrix, bibliography, documents }) => (
+      {section.topics.map(({ id, title, pending, paragraphs, figure, stationDemo, table, matrix, bibliography, documents }) => (
         <section className="report-topic" key={id} aria-labelledby={id}>
           <h2 id={id} tabIndex={-1}>{title}</h2>
           {paragraphs?.map(({ text, citations }) => (
@@ -31,6 +32,7 @@ export function ReportPage({ index }: { index: number }) {
           ))}
           {pending && <Pending>{pending}</Pending>}
           {figure && <ReportFigure {...figure} />}
+          {stationDemo && <StationDemo {...stationDemo} />}
           {table && <ReportTable {...table} />}
           {matrix && <DecisionMatrix {...matrix} />}
           {bibliography && bibliography.length > 0 && <Bibliography references={bibliography} />}

@@ -59,6 +59,11 @@ export function ReportLayout({ children }: { children: ReactNode }) {
                 </li>
               ))}
             </ol>
+            <p className="contents-label contents-subhead">Interactive prototype</p>
+            <ol>
+              <li><NavLink to="/simulator" end onClick={() => setMenuLocation(undefined)}>Sensor simulator</NavLink></li>
+              <li><NavLink to="/station" end onClick={() => setMenuLocation(undefined)}>3D station</NavLink></li>
+            </ol>
           </nav>
         </aside>
         <main id="report-main" tabIndex={-1} ref={main}>{children}</main>

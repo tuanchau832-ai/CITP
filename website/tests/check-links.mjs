@@ -6,7 +6,7 @@ const expected = [
   '/', '/pages/background', '/pages/problem-criteria', '/pages/design-options',
   '/pages/detailed-design', '/pages/prototyping', '/pages/implementation',
   '/pages/cost-analysis', '/pages/considerations', '/pages/recommendations',
-  '/pages/references', '/pages/appendices',
+  '/pages/references', '/pages/appendices', '/simulator', '/station',
 ];
 
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom' });

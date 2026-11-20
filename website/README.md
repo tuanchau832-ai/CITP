@@ -20,6 +20,10 @@ npm run build
 npm run preview
 ```
 
+## Interactive prototype pages
+
+The sensor simulator and the 3D station are two pages of the report, at `/simulator` and `/station`. Both are rendered by [DemoWorkspace](src/components/DemoWorkspace.tsx), which stays mounted when the reader switches pages, so the simulator keeps running and the station keeps following its readings. The plain HTML, CSS and JavaScript for each page lives in `public/embed/simulator/` and `public/embed/station/`. The station page needs internet access for three.js. The "Link the 3D station to the simulator" checkbox switches the link off.
+
 ## Report requirements
 
 The route map in [architecture.md](../docs/website/architecture.md) follows the narrative and section list in the [restructure brief](../WEBSITE_RESTRUCTURE_PROMPT.md). The Task 3 rubric, website template, report skeleton, and agreed reverse brief were unavailable in this checkout. Confirm the scaffold against those originals when they are available.
